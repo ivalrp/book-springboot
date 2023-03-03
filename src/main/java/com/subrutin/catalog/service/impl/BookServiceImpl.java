@@ -76,6 +76,11 @@ public class BookServiceImpl implements BookService{
 		bookRepository.update(book);
 	}
 
+	@Override
+	public void deleteBook(Long bookId) {
+		bookRepository.delete(bookId);
+	}
+
 //	public BookRepository getBookRepository() {
 //		return bookRepository;
 //	}
@@ -83,8 +88,5 @@ public class BookServiceImpl implements BookService{
 //	public void setBookRepository(BookRepository bookRepository) {
 //		this.bookRepository = bookRepository;
 //	}
-	
-	
-	
-	
+
 }

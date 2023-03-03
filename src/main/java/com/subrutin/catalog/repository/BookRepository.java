@@ -13,4 +13,6 @@ public interface BookRepository {
 
 	public void update(Book book);
 
+	public void delete(Long bookId);
+
 }
