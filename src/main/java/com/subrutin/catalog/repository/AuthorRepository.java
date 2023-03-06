@@ -16,6 +16,10 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     @Override
     public Optional<Author> findById(Long id);
 
+    //sql select * from Auhtor a where a.id =:id AND deleted := false
+    public Optional<Author> findByIdAndDeletedFalse(Long id);
+
+
     //sql -> select a from Author a where a.name Like =: authorId
     public List<Author> findByNameLike(String authorName);
 
