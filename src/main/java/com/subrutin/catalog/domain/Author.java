@@ -8,7 +8,9 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -19,11 +21,13 @@ import java.time.LocalDate;
 //@DynamicUpdate
 @SQLDelete(sql = "UPDATE author SET deleted = true WHERE id = ?")
 @Where(clause = "deleted=false")
-public class Author{
+public class Author extends AbstractBaseEntity {
+
+	private static final long serialVersionUID = 4415917570527208430L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-//	@SequenceGenerator(name = "author_generator", sequenceName = "auhtor_id_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_generator")
+	@SequenceGenerator(name = "author_generator", sequenceName = "author_id_sequence")
 	private Long id;
 
 	@Column(name = "name", nullable = false)
@@ -32,6 +36,4 @@ public class Author{
 	@Column(name = "birth_date", nullable = false)
 	private LocalDate birthDate;
 
-	@Column(name = "deleted", columnDefinition = "boolean default false")
-	private Boolean deleted;
 }
