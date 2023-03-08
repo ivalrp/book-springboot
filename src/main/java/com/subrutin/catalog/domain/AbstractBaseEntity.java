@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.UUID;
 
-@Table(name = "author", indexes = {
+@Table( indexes = {
         @Index(name = "uk_secure_id", columnList = "secure_id")
 })
 @Data
@@ -20,5 +20,5 @@ public abstract class AbstractBaseEntity implements Serializable {
     private String secureId = UUID.randomUUID().toString();
 
     @Column(name = "deleted", columnDefinition = "boolean default false")
-    private Boolean deleted;
+    private boolean deleted;
 }

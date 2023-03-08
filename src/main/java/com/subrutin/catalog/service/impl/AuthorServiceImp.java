@@ -20,9 +20,9 @@ public class AuthorServiceImp implements AuthorService {
 
     private final AuthorRepository authorRepository;
     @Override
-    public AuthorResponseDTO findAuthorById(Long id) {
+    public AuthorResponseDTO findAuthorById(String id) {
         //1.fecth data from database
-        Author author = authorRepository.findById(id)
+        Author author = authorRepository.findBySecureId(id)
                 .orElseThrow(()-> new BadRequestException("INVALID_AUTHOR_ID"));
         //2. auhtor -> authorresponseDTO
         AuthorResponseDTO dto = new AuthorResponseDTO();
@@ -46,8 +46,8 @@ public class AuthorServiceImp implements AuthorService {
     }
 
     @Override
-    public void updateAuthor(Long authorId, AuthorUpdateRequestDTO dto) {
-        Author author = authorRepository.findById(authorId)
+    public void updateAuthor(String authorId, AuthorUpdateRequestDTO dto) {
+        Author author = authorRepository.findBySecureId(authorId)
                 .orElseThrow(()-> new BadRequestException("INVALID_AUTHOR_ID"));
         author.setName(dto.getAuthorName() == null ? author.getName() : dto.getAuthorName());
         author.setBirthDate(dto.getBirthDate() == null ? author.getBirthDate() : LocalDate.ofEpochDay(dto.getBirthDate()));
@@ -55,9 +55,12 @@ public class AuthorServiceImp implements AuthorService {
     }
 
     @Override
-    public void deleteAuthor(Long authorId) {
+    public void deleteAuthor(String authorId) {
         //HARD DELETE menjadi soft delete seleteah anotasi @SQLDelete dana @Where ditambahkan
-        authorRepository.deleteById(authorId);
+
+        Author author = authorRepository.findBySecureId(authorId)
+                .orElseThrow(()-> new BadRequestException("INVALID_AUTHOR_ID"));
+        authorRepository.delete(author);
 
         //SOFT DELETE
 //        Author author = authorRepository.findByIdAndDeletedFalse(authorId)
@@ -65,5 +68,25 @@ public class AuthorServiceImp implements AuthorService {
 //        author.setDeleted(Boolean.TRUE);
 //        authorRepository.save(author);
 
+    }
+
+    @Override
+    public List<Author> findAuthors(List<String> authorIdList) {
+        List<Author> authorList = authorRepository.findBySecureIdIn(authorIdList);
+        if (authorList.isEmpty())
+            throw new BadRequestException("author cant empty");
+
+        return authorList;
+    }
+
+    @Override
+    public List<AuthorResponseDTO> constructDTO(List<Author> authors) {
+        return authors.stream().map(a -> {
+            AuthorResponseDTO dto = new AuthorResponseDTO();
+            dto.setAuthorName(a.getName());
+            dto.setBirthDate(a.getBirthDate().toEpochDay());
+
+            return dto;
+        }).collect(Collectors.toList());
     }
 }

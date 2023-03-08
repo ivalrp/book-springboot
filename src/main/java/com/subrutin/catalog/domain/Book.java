@@ -24,7 +24,7 @@ public class Book extends AbstractBaseEntity {
 	@Column(name = "title", nullable = false)
 	private String title;
 
-	@Column(name = "description")
+	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 
 	@ManyToOne

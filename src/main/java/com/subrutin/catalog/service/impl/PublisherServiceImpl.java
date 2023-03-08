@@ -1,10 +1,7 @@
 package com.subrutin.catalog.service.impl;
 
 import com.subrutin.catalog.domain.Publisher;
-import com.subrutin.catalog.dto.PublisherCreateRequestDTO;
-import com.subrutin.catalog.dto.PublisherListResponseDTO;
-import com.subrutin.catalog.dto.PublisherUpdateRequestDTO;
-import com.subrutin.catalog.dto.ResultPageResponseDTO;
+import com.subrutin.catalog.dto.*;
 import com.subrutin.catalog.exception.BadRequestException;
 import com.subrutin.catalog.repository.PublisherRepository;
 import com.subrutin.catalog.service.PublisherService;
@@ -37,6 +34,14 @@ public class PublisherServiceImpl implements PublisherService {
     }
 
     @Override
+    public Publisher findPublisher(String publisherId) {
+        Publisher publisher = publisherRepository.findBySecureId(publisherId)
+                .orElseThrow(() -> new BadRequestException("invalid.publisher_id"));
+
+        return publisher;
+    }
+
+    @Override
     public void updatePublisher(String publisherId, PublisherUpdateRequestDTO dto) {
         Publisher publisher = publisherRepository.findBySecureId(publisherId)
                 .orElseThrow(() -> new BadRequestException("invalid.publisher_id"));
@@ -64,5 +69,14 @@ public class PublisherServiceImpl implements PublisherService {
             return dto;
         }).collect(Collectors.toList());
         return PaginationUtil.createResultPageDTO(dtos, pageResult.getTotalElements(), pageResult.getTotalPages());
+    }
+
+    @Override
+    public PublisherResponseDTO constructDTO(Publisher publisher) {
+        PublisherResponseDTO dto = new PublisherResponseDTO();
+        dto.setPublisherId(publisher.getSecureId());
+        dto.setPublisherName(publisher.getName());
+
+        return dto;
     }
 }

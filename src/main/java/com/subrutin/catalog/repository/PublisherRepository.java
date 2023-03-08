@@ -13,4 +13,5 @@ public interface PublisherRepository extends JpaRepository<Publisher, Long> {
 
     public Page<Publisher> findByNameLikeIgnoreCase(String publisherName, Pageable pageable);
 
+
 }
