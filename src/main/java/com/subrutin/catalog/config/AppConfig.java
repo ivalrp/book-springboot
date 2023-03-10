@@ -11,10 +11,15 @@ import com.subrutin.catalog.domain.Author;
 import com.subrutin.catalog.domain.Book;
 import com.subrutin.catalog.repository.BookRepository;
 import com.subrutin.catalog.repository.impl.BookRepositoryImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Configuration
 public class AppConfig {
+
+
+
 //
 //	@Bean
 //	public Author author() {

@@ -10,6 +10,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -35,5 +36,8 @@ public class Author extends AbstractBaseEntity {
 
 	@Column(name = "birth_date", nullable = false)
 	private LocalDate birthDate;
+
+	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+	private List<Address> addresses;
 
 }

@@ -1,0 +1,36 @@
+package com.subrutin.catalog.service.impl;
+
+import com.subrutin.catalog.dto.UserDetailResponseDTO;
+import com.subrutin.catalog.exception.ResourceNotFoundException;
+import com.subrutin.catalog.repository.AppUserRepository;
+import com.subrutin.catalog.service.AppUserService;
+import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+@Service
+@AllArgsConstructor
+public class AppUserServiceImpl implements AppUserService {
+
+    private AppUserRepository appUserRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        return appUserRepository.findByUsername(s)
+                .orElseThrow(() -> new ResourceNotFoundException("Invalid.Username"));
+    }
+
+    @Override
+    public UserDetailResponseDTO findUserDetail() {
+
+        SecurityContext ctx = SecurityContextHolder.getContext();
+        UserDetailResponseDTO dto = new UserDetailResponseDTO();
+        String username = ctx.getAuthentication().getName();
+
+        dto.setUserName(username);
+        return dto;
+    }
+}
