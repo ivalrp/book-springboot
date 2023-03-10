@@ -5,6 +5,7 @@ import com.subrutin.catalog.dto.AuthorCreateRequestDTO;
 import com.subrutin.catalog.dto.AuthorResponseDTO;
 import com.subrutin.catalog.dto.AuthorUpdateRequestDTO;
 import com.subrutin.catalog.exception.BadRequestException;
+import com.subrutin.catalog.exception.ResourceNotFoundException;
 import com.subrutin.catalog.repository.AuthorRepository;
 import com.subrutin.catalog.service.AuthorService;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,9 +24,13 @@ public class AuthorServiceImp implements AuthorService {
     @Override
     public AuthorResponseDTO findAuthorById(String id) {
         //1.fecth data from database
-        Author author = authorRepository.findBySecureId(id)
-                .orElseThrow(()-> new BadRequestException("INVALID_AUTHOR_ID"));
+        Optional<Author> authorOptional = authorRepository.findBySecureId(id);
+//                .orElseThrow(()-> new ResourceNotFoundException("invalid_id"));
         //2. auhtor -> authorresponseDTO
+        if (authorOptional.isEmpty()){
+            throw new ResourceNotFoundException("Invalid_Id");
+        }
+        Author author = authorOptional.get();
         AuthorResponseDTO dto = new AuthorResponseDTO();
         dto.setAuthorName(author.getName());
         dto.setBirthDate(author.getBirthDate().toEpochDay());
