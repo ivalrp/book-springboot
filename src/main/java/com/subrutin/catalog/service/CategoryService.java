@@ -6,6 +6,7 @@ import com.subrutin.catalog.dto.CategoryListResponseDTO;
 import com.subrutin.catalog.dto.ResultPageResponseDTO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CategoryService {
 
@@ -17,4 +18,6 @@ public interface CategoryService {
     public List<Category> findCategories(List<String> categoryCodeList);
 
     public List<CategoryListResponseDTO> constructDTO(List<Category> categories);
+
+    public Map<Long, List<String>> findCategoryMap(List<Long> bookIdList);
 }

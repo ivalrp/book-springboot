@@ -3,16 +3,12 @@ package com.subrutin.catalog.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

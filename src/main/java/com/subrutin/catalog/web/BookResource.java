@@ -1,12 +1,10 @@
 package com.subrutin.catalog.web;
 
-import com.subrutin.catalog.dto.BookCreateRequestDTO;
-import com.subrutin.catalog.dto.BookUpdateRequestDTO;
+import com.subrutin.catalog.dto.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.*;
 
-import com.subrutin.catalog.dto.BookDetailResponseDTO;
 import com.subrutin.catalog.service.BookService;
 
 import lombok.AllArgsConstructor;
@@ -36,6 +34,19 @@ public class BookResource {
 	public ResponseEntity<Void> createNewBook(@RequestBody BookCreateRequestDTO dto){
 		bookService.createNewBook(dto);
 		return ResponseEntity.created(URI.create("/book")).build();
+	}
+
+	@GetMapping("/v2/book")
+	public ResponseEntity<ResultPageResponseDTO<BookListResponseDTO>> findBookList(
+			@RequestParam(name = "page", required = true, defaultValue = "0") Integer page,
+			@RequestParam(name = "limit", required = true, defaultValue = "10") Integer limit,
+			@RequestParam(name = "sortBy", required = true, defaultValue = "title") String sortBy,
+			@RequestParam(name = "direction", required = true, defaultValue = "asc") String direction,
+			@RequestParam(name = "bookTitle", required = false, defaultValue = "") String bookTitle,
+			@RequestParam(name = "publisherName", required = false, defaultValue = "") String publisher,
+			@RequestParam(name = "authorName", required = false, defaultValue = "") String authorName
+	){
+		return ResponseEntity.ok().body(bookService.findBookList(page, limit, sortBy, direction, bookTitle, publisher, authorName));
 	}
 
 	@GetMapping("/v1/book")

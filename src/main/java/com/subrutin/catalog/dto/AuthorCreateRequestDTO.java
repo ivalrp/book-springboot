@@ -1,5 +1,6 @@
 package com.subrutin.catalog.dto;
 
+import com.subrutin.catalog.validator.annotation.ValidAuthorName;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -9,6 +10,7 @@ import java.util.List;
 @Data
 public class AuthorCreateRequestDTO {
 
+    @ValidAuthorName
     @NotBlank
     private String authorName;
 

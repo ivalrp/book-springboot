@@ -1,7 +1,9 @@
 package com.subrutin.catalog.repository;
 
 import com.subrutin.catalog.domain.Author;
+import com.subrutin.catalog.dto.AuthorQueryDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,5 +28,11 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     public List<Author> findByNameLike(String authorName);
 
     public List<Author> findBySecureIdIn(List<String> authorIdList);
+
+    @Query("SELECT new com.subrutin.catalog.dto.AuthorQueryDTO(b.id, bc.name) " +
+            "FROM Book b " +
+            "JOIN b.authors bc " +
+            "WHERE b.id IN :bookIdList ")
+    public List<AuthorQueryDTO> findAuthorByBookIdList(List<Long> bookIdList);
 
 }

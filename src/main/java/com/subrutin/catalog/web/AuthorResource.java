@@ -7,6 +7,7 @@ import com.subrutin.catalog.dto.AuthorUpdateRequestDTO;
 import com.subrutin.catalog.service.AuthorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -14,6 +15,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@Validated
 @AllArgsConstructor
 public class AuthorResource {
 

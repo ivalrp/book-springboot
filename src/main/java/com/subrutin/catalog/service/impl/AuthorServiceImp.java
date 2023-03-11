@@ -2,9 +2,7 @@ package com.subrutin.catalog.service.impl;
 
 import com.subrutin.catalog.domain.Address;
 import com.subrutin.catalog.domain.Author;
-import com.subrutin.catalog.dto.AuthorCreateRequestDTO;
-import com.subrutin.catalog.dto.AuthorResponseDTO;
-import com.subrutin.catalog.dto.AuthorUpdateRequestDTO;
+import com.subrutin.catalog.dto.*;
 import com.subrutin.catalog.exception.BadRequestException;
 import com.subrutin.catalog.exception.ResourceNotFoundException;
 import com.subrutin.catalog.repository.AuthorRepository;
@@ -13,9 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -117,5 +113,22 @@ public class AuthorServiceImp implements AuthorService {
 
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<Long, List<String>> findAuthorMaps(List<Long> authorId) {
+        List<AuthorQueryDTO> queryList = authorRepository.findAuthorByBookIdList(authorId);
+        Map<Long, List<String>> authorMap = new HashMap<>();
+        List<String> authorList = null;
+        for (AuthorQueryDTO q:queryList){
+            if (!authorMap.containsKey(q.getBookId())){
+                authorList = new ArrayList<>();
+            } else {
+                authorList = authorMap.get(q.getBookId());
+            }
+            authorList.add(q.getAuthorName());
+            authorMap.put(q.getBookId(), authorList);
+        }
+        return authorMap;
     }
 }

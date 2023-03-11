@@ -8,12 +8,15 @@ import com.subrutin.catalog.service.PublisherService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
 import java.net.URI;
 
 @RestController
+@Validated
 @AllArgsConstructor
 public class PublisherResource {
 
@@ -28,7 +31,8 @@ public class PublisherResource {
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/v1/publisher/{publisherId}")
-    public ResponseEntity<Void> updatePublisher(@PathVariable("publisherId") String publisherId,
+    public ResponseEntity<Void> updatePublisher(@PathVariable("publisherId")
+                                                    @Size(max = 36, min = 36, message = "publisher.id.not.uuid") String publisherId,
                                                 @RequestBody @Valid PublisherUpdateRequestDTO dto){
         publisherService.updatePublisher(publisherId, dto);
         return  ResponseEntity.ok().build();
